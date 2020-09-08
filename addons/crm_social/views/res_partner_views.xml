@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_customers_form_inherit_social_media" model="ir.ui.view">
+        <field name="name">res.company.form.inherit.social.media</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']" position="after">
+                <page string="Social" name="social_networks" >
+                    <field name="profile_incomplete" invisible="1"/>
+                    <group name="container_row_2">
+                        <div name="Facebook" class="col-12">
+                            <group>
+                                <img src="/crm_social/static/img/facebook.png" width="30px" height="30px" alt="Facebook"/>
+                                <field name="social_facebook" />
+                            </group>
+                        </div>
+                        <div name="Twitter" class="col-12">
+                            <group>
+                                <img src="/crm_social/static/img/twitter.png" width="30px" height="30px" alt="Twitter"/>
+                                <field name="social_twitter" />
+                            </group>
+                        </div>
+                        <div name="Linkedin" class="col-12">
+                            <group>
+                                <img src="/crm_social/static/img/linkedin.png" width="30px" height="30px" alt="Linkedin"/>
+                                <field name="social_linkedin"/>
+                            </group>
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_customers_filter_inherit_social_media" model="ir.ui.view">
+        <field name="name">res.partner.filter.inherit.social.media</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+         <field name="arch" type="xml">
+             <xpath expr="//filter[@name='inactive']" position="after">
+                 <filter string="Profile Incomplete" name="profile_incomplete" domain="[('profile_incomplete', '=', True)]"/>
+             </xpath>
+             <xpath expr="//group[@name='group_by']" position="inside">
+                <filter name="facebook" string="Facebook" domain="[]" context="{'group_by' : 'social_facebook'}" />
+                <filter name="twitter" string="Twitter" context="{'group_by': 'social_twitter'}"/>
+                <filter name="linkedin" string="Linkedin" context="{'group_by': 'social_linkedin'}"/>
+             </xpath>
+         </field>
+    </record>
+
+    <record id="view_customers_tree_inherit_social_media" model="ir.ui.view">
+        <field name="name">res.partner.tree.inherit.social.media</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='active']" position="after">
+                 <field name="profile_incomplete" invisible="1"></field>
+                 <button string="Profile Complete" class="fa fa-check" aria-label="Profile Complete" title="Profile Complete" attrs="{'invisible': [('profile_incomplete', '=', True)]}"/>
+             </xpath>
+         </field>
+    </record>
+
+    <record id="view_customers_kanban_inherit_social_media" model="ir.ui.view">
+        <field name="name">res.partner.kanban.inherit.social.media</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                 <field name="profile_incomplete" invisible="1"/>
+            </xpath>
+             <xpath expr="//div[@class='oe_kanban_details']" position="inside">
+                 <div t-if="!record.profile_incomplete.raw_value">
+                     <i role="img" class="o_green fa fa-check"/>
+                     <span>Profile Complete</span>
+                 </div>
+             </xpath>
+         </field>
+    </record>
+</odoo>
